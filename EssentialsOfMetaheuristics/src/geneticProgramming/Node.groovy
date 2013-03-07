@@ -6,21 +6,28 @@ class Node{
        
     Random random = new Random()
     
+    def count = 0
+    
     def size() {
-        count = 0
-        sizeHelper(this)
+        sizeHelper(this, this.Arity)
         count
     }
     
-    def sizeHelper(currentNode) {
+    def sizeHelper(currentNode, currentArity) {
         count++
-        
-        if (currentNode.left != currentNode.class == LeafNode) {
-            sizeHelper(currentNode.left)
+
+        if (this.class == FunctionNode) {
+            if (currentArity == 1){
+                sizeHelper(currentNode.children[0], currentNode.children[0].Arity)
+            } else if (currentArity == 2){
+                sizeHelper(currentNode.children[0], currentNode.children[0].Arity)
+                sizeHelper(currentNode.children[1], currentNode.children[1].Arity)
+            }
         }
-        if (currentNode.right != currentNode.class == LeafNode) {
-            sizeHelper(currentNode.right)
-        }
+              
+//        for(i in currentNode.children){
+//            sizeHelper(currentNode.getChildren(i))
+//        }
     }
     
 }
