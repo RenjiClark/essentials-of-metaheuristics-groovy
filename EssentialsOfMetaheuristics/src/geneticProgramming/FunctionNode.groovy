@@ -2,21 +2,21 @@ package geneticProgramming
 
 class FunctionNode extends Node{
 
-
+    def tree
     def children = []
-    def funcIndex = random.nextInt(functions.size())
-    def func = functions[funcIndex].value
-    def key = functions[funcIndex].key
-    def Arity = functions[funcIndex].arity
+    def funcIndex = random.nextInt(tree.functions.size())
+    def func = tree.functions[funcIndex].value
+    def key = tree.functions[funcIndex].key
+    def Arity = tree.functions[funcIndex].arity
     def index
     //    def functions = problem.functions
-    def functions = [new ValueArityPair({x,y -> x+y}, '+', 2),
-        new ValueArityPair({x,y -> x-y}, '-', 2),
-        new ValueArityPair({x,y -> x*y}, '*', 2),
-        new ValueArityPair({x,y -> x/y}, '/', 2),
-        new ValueArityPair({x-> Math.sin(x)}, 'Sin', 1),
-        new ValueArityPair({x-> Math.cos(x)}, 'Cos', 1),
-        new ValueArityPair({x-> Math.log(x)}, 'Log', 1)]
+//    def functions = [new ValueArityPair({x,y -> x+y}, '+', 2),
+//        new ValueArityPair({x,y -> x-y}, '-', 2),
+//        new ValueArityPair({x,y -> x*y}, '*', 2),
+//        new ValueArityPair({x,y -> x/y}, '/', 2),
+//        new ValueArityPair({x-> Math.sin(x)}, 'Sin', 1),
+//        new ValueArityPair({x-> Math.cos(x)}, 'Cos', 1),
+//        new ValueArityPair({x-> Math.log(x)}, 'Log', 1)]
 
     def eval() {
         def child0Eval = children[0].eval()
@@ -26,10 +26,11 @@ class FunctionNode extends Node{
         return func(child0Eval, children[1].eval())
     }
 
-    def FunctionNode(index) {
+    def FunctionNode(tree, index) {
+        this.tree = tree
         this.index = index
         index++
-
+        
         def currentChild = 0
         Arity.times {
             if (currentChild == 1) {
@@ -40,9 +41,9 @@ class FunctionNode extends Node{
 
             def childIsLeaf = random.nextBoolean()
             if(childIsLeaf) {
-                children += new LeafNode(index)
+                children += new LeafNode(tree, index)
             } else {
-                children += new FunctionNode(index)
+                children += new FunctionNode(tree, index)
             }
         }
     }

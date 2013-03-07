@@ -7,9 +7,17 @@ class LeafNode extends Node{
     def Arity = 0
  
     def index
+    def tree
     
-    def LeafNode(index){
+    def LeafNode(tree, index){
+        this.tree = tree
         this.index = index
+        
+        if(random.nextBoolean()) {
+            value = random.nextInt(100)
+        } else {
+            value = tree.varArray[random.nextInt(tree.varArray.size)]
+        }
     }
     
     def eval() {

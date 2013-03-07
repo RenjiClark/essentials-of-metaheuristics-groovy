@@ -7,6 +7,7 @@ class Node{
     Random random = new Random()
     
     def count = 0
+    def tree
     
     def size() {
         sizeHelper(this, this.Arity)
