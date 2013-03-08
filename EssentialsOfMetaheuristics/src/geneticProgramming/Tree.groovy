@@ -17,11 +17,11 @@ class Tree{
         new ValueArityPair({x,y -> x/y}, '/', 2),
         new ValueArityPair({x-> Math.sin(x)}, 'Sin', 1),
         new ValueArityPair({x-> Math.cos(x)}, 'Cos', 1),
-        new ValueArityPair({x-> Math.log(x)}, 'Log', 1)], variableArray = [101, 102]) {
+        new ValueArityPair({x-> Math.log(x)}, 'Log', 1)], variableArray = [101, 102], newTree = true) {
         //include max depth and size here
         this.functions = functions
         varArray = variableArray
-        head = new FunctionNode(this, 0)
+        if (newTree) head = new FunctionNode(this, null, 0)
         //       varArray = new Object[problem.numVars]
     }
 
@@ -53,6 +53,14 @@ class Tree{
 
     String toString() {
         "${head.eval()}\n${head.toString()}"
+    }
+
+    def clone() {
+        def clone = new Tree(functions, varArray, false)
+        println("${head}")
+        clone.head = head.clone()
+        println("${clone}")
+        
     }
 
 }

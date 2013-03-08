@@ -41,7 +41,24 @@ class Crossovers{
         def fatherSeed = father.search(fatherXO)
         def fatherSeedClone = fatherSeed.clone
         def motherEgg = mother.search(motherXO)
-        fatherSeed = motherEgg
-        motherEgg = fatherSeedClone
+
+        if (fatherSeed.isHead()){
+            fatherSeed.tree.head = motherEgg
+        } else if (fatherSeed.isSecondChild()) {
+            fatherSeed.parent.children[1] = motherEgg
+        } else {
+            fatherSeed.parent.children[0] = motherEgg
+        }
+
+        if (motherEgg.isHead()){
+            motherEgg.tree.head = fatherSeedClone
+        } else if (motherEgg.isSecondChild()) {
+            fatherSeed.parent.children[1] = fatherSeedClone
+        } else {
+            fatherSeed.parent.children[0] = fatherSeedClone
+        }
+
+        fatherSeed.tree.updateIndexes()
+        motherEgg.tree.updateIndexes()
     }
 }

@@ -9,6 +9,7 @@ class FunctionNode extends Node{
     def key = tree.functions[funcIndex].key
     def Arity = tree.functions[funcIndex].arity
     def index
+    def parent
     //    def functions = problem.functions
 //    def functions = [new ValueArityPair({x,y -> x+y}, '+', 2),
 //        new ValueArityPair({x,y -> x-y}, '-', 2),
@@ -17,7 +18,7 @@ class FunctionNode extends Node{
 //        new ValueArityPair({x-> Math.sin(x)}, 'Sin', 1),
 //        new ValueArityPair({x-> Math.cos(x)}, 'Cos', 1),
 //        new ValueArityPair({x-> Math.log(x)}, 'Log', 1)]
-
+    
     def eval() {
         def child0Eval = children[0].eval()
         if (key == '/' && child0Eval == 0) return 1
@@ -26,8 +27,9 @@ class FunctionNode extends Node{
         return func(child0Eval, children[1].eval())
     }
 
-    def FunctionNode(tree, index) {
+    def FunctionNode(tree, parent, index, createChildren = true) {
         this.tree = tree
+        this.parent = parent
         this.index = index
         index++
         
@@ -41,9 +43,9 @@ class FunctionNode extends Node{
 
             def childIsLeaf = random.nextBoolean()
             if(childIsLeaf) {
-                children += new LeafNode(tree, index)
+                children += new LeafNode(tree, this, index)
             } else {
-                children += new FunctionNode(tree, index)
+                children += new FunctionNode(tree, this, index)
             }
         }
     }

@@ -5,12 +5,14 @@ class LeafNode extends Node{
     def value = random.nextInt(100)
     
     def Arity = 0
- 
-    def index
-    def tree
     
-    def LeafNode(tree, index){
+    def tree
+    def parent
+    def index
+    
+    def LeafNode(tree, parent, index){
         this.tree = tree
+        this.parent = parent
         this.index = index
         
         if(random.nextBoolean()) {
