@@ -1,6 +1,6 @@
 package geneticProgramming
 
-class ValueArityPair {
+class ValueArityPair implements Serializable{
     
     def value
     def key

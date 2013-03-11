@@ -2,7 +2,7 @@ package geneticProgramming
 
 //import groovy.util.Node;
 
-class Node{
+class Node implements Serializable{
 
     Random random = new Random()
 
@@ -39,15 +39,15 @@ class Node{
         parent.Arity == 2 && parent.children[1] == this
     }
 
-    def myClone() {
-        def clone = this.clone()
-        if (clone.Arity == 1){
-            clone.children[0] = clone.children[0].clone()
-        } else if (clone.Arity == 2){
-            clone.children[0] = clone.children[0].clone()
-            clone.children[1] = clone.children[1].clone()
-        }
-        return this.clone()
-    }
+//    def myClone() {
+//        def clone = this.clone()
+//        if (clone.Arity == 1){
+//            clone.children[0] = clone.children[0].clone()
+//        } else if (clone.Arity == 2){
+//            clone.children[0] = clone.children[0].clone()
+//            clone.children[1] = clone.children[1].clone()
+//        }
+//        return this.clone()
+//    }
 
 }

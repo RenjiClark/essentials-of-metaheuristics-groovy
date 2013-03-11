@@ -23,6 +23,8 @@ class TreeSpec extends Specification{
 
         then:
         println(someTree)
+		println(someTree.treeClone())
+		
         1==1
         //someTree.eval() == Eval.me(someTree.toString())
     }
