@@ -20,12 +20,19 @@ class TreeSpec extends Specification{
         def someTree8 = new Tree()
         def someTree9 = new Tree()
         def someTree10 = new Tree()
+		def treeClone = someTree.treeClone()
 
         then:
-        println(someTree)
-		println(someTree.treeClone())
+		println('orig = '+ someTree)
+		println('clone = ' + treeClone)
 		
-        1==1
+		println("${someTree.size()} = ${treeClone.size()}")
+		println("${someTree.depth()} = ${treeClone.depth()}")
+		//println('clone = ' + treeClone.search(treeClone.size()/2))
+		
+		//println('orig = '+ someTree)
+		//println('clone = ' + treeClone)
+		1==1
         //someTree.eval() == Eval.me(someTree.toString())
     }
 

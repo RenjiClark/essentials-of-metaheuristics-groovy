@@ -26,7 +26,9 @@ class LeafNode extends Node{
         return value
     }
     
-    def depth = 0
+    def depth(){
+		0
+	}
     
     def updateIndexes(index){
         
