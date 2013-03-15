@@ -2,33 +2,30 @@ package geneticProgramming
 
 //import groovy.util.Node;
 
-class Node{
+class Node implements Cloneable{
 
     Random random = new Random()
 
-    def count = 0
+    def count
     def tree
 
     def size() {
-        sizeHelper(this, this.Arity)
+        count = 0
+        sizeHelper(this)
         count
     }
 
-    def sizeHelper(currentNode, currentArity) {
+    def sizeHelper(currentNode) {
         count++
 
         if (this.class == FunctionNode) {
-            if (currentArity == 1){
-                sizeHelper(currentNode.children[0], currentNode.children[0].Arity)
-            } else if (currentArity == 2){
-                sizeHelper(currentNode.children[0], currentNode.children[0].Arity)
-                sizeHelper(currentNode.children[1], currentNode.children[1].Arity)
+            if (currentNode.Arity == 1){
+                sizeHelper(currentNode.children[0])
+            } else if (currentNode.Arity == 2){
+                sizeHelper(currentNode.children[0])
+                sizeHelper(currentNode.children[1])
             }
         }
-
-        //        for(i in currentNode.children){
-        //            sizeHelper(currentNode.getChildren(i))
-        //        }
     }
 
     def isHead() {
@@ -42,12 +39,12 @@ class Node{
     def myClone() {
         def clone = this.clone()
         if (clone.Arity == 1){
-            clone.children[0] = clone.children[0].clone()
+            clone.children[0] = clone.children[0].myClone()
         } else if (clone.Arity == 2){
-            clone.children[0] = clone.children[0].clone()
-            clone.children[1] = clone.children[1].clone()
+            clone.children[0] = clone.children[0].myClone()
+            clone.children[1] = clone.children[1].myClone()
         }
-        return this.clone()
+        return clone
     }
 
 }

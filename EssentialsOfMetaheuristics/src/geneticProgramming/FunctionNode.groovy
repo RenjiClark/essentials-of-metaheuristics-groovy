@@ -10,59 +10,44 @@ class FunctionNode extends Node{
     def Arity = tree.functions[funcIndex].arity
     def index
     def parent
-    //    def functions = problem.functions
-//    def functions = [new ValueArityPair({x,y -> x+y}, '+', 2),
-//        new ValueArityPair({x,y -> x-y}, '-', 2),
-//        new ValueArityPair({x,y -> x*y}, '*', 2),
-//        new ValueArityPair({x,y -> x/y}, '/', 2),
-//        new ValueArityPair({x-> Math.sin(x)}, 'Sin', 1),
-//        new ValueArityPair({x-> Math.cos(x)}, 'Cos', 1),
-//        new ValueArityPair({x-> Math.log(x)}, 'Log', 1)]
-    
+
     def eval() {
         def child0Eval = children[0].eval()
-        if (key == '/' && child0Eval == 0) return 1
-        if (key == 'Log' && child0Eval < 0) return 1
+        if (key == 'Log' && child0Eval.compareTo(0) <= 0) return 1
         if (Arity == 1) return func(child0Eval)
-        return func(child0Eval, children[1].eval())
+        
+        def child1Eval = children[1].eval()
+        if (key == '/' && Math.abs(child1Eval).compareTo(0.00001) < 0) return 1
+        return func(child0Eval, child1Eval)
     }
 
-    def FunctionNode(tree, parent, index, createChildren = true) {
+    def FunctionNode(tree, parent, createChildren = true) {
         this.tree = tree
         this.parent = parent
         this.index = index
-        index++
-        
-        def currentChild = 0
-        Arity.times {
-            if (currentChild == 1) {
-                index += children[0].size()
-            } else {
-                currentChild++
-            }
 
-            def childIsLeaf = random.nextBoolean()
-            if(childIsLeaf) {
-                children += new LeafNode(tree, this, index)
+        Arity.times {
+            def pickChild = random.nextInt(4)
+            if(pickChild == 0) {
+                children += new LeafNode(tree, this)
+            } else if(pickChild == 1){
+                if (tree.varArraySize != 0) {
+                    children += new VarNode(tree, this)
+                } else {
+                    children += new LeafNode(tree, this)
+                }
             } else {
-                children += new FunctionNode(tree, this, index)
+                children += new FunctionNode(tree, this)
             }
         }
     }
 
     def updateIndexes(index){
         this.index = index
-        index++
-
-        def currentChild = 0
-        for(child in children){
-            if (currentChild == 1) {
-                index += child.size()
-            } else {
-                currentChild++
-            }
-            child.updateIndexes(index)
-        }
+        
+        children[0].updateIndexes(1 + index)
+        if (Arity == 2) children[1].updateIndexes(1 + children[0].size() + index)
+        
     }
 
     @Override
@@ -77,6 +62,18 @@ class FunctionNode extends Node{
             return (children[0].depth() + 1)
         }
         return (children[1].depth() + 1)
+    }
+    
+    def clone(treeC = this.tree, parentC = this.parent){
+        def clone = new FunctionNode(treeC, parentC, false)
+        clone.funcIndex = funcIndex
+        clone.func = func
+        clone.key = key
+        clone.Arity = Arity
+        clone.children = []
+        clone.children.add(children[0].clone(treeC, clone))
+        if (Arity == 2) clone.children.add(children[1].clone(treeC, clone))
+        return clone
     }
 
 }

@@ -37,10 +37,20 @@ class Crossovers{
         [f,m]
     }
 
-    def treeCrossover = {father, mother, fatherXO = random.nextInt(father.size()), motherXO = random.nextInt(mother.size()) ->
-        def fatherSeed = father.search(fatherXO)
-        def fatherSeedClone = fatherSeed.clone
-        def motherEgg = mother.search(motherXO)
+    def treeCrossover = {father, mother ->
+        def fatherClone = father.clone()
+        def motherClone = mother.clone()
+        def fatherXO = random.nextInt(fatherClone.size())
+        def motherXO = random.nextInt(motherClone.size())
+
+//        if (father.size() != fatherClone.size()) println("Father Failed ${father} ${fatherClone}")
+//        if (mother.size() != motherClone.size()) println("Mother Failed ${mother} ${motherClone}")
+        
+//        println("Crossover Print ${fatherClone.size()} ${fatherXO} ${motherClone.size()} ${motherXO}")
+        def fatherSeed = fatherClone.search(fatherXO)
+        def fatherSeedClone = fatherSeed.clone()
+
+        def motherEgg = motherClone.search(motherXO)
 
         if (fatherSeed.isHead()){
             fatherSeed.tree.head = motherEgg
@@ -53,12 +63,13 @@ class Crossovers{
         if (motherEgg.isHead()){
             motherEgg.tree.head = fatherSeedClone
         } else if (motherEgg.isSecondChild()) {
-            fatherSeed.parent.children[1] = fatherSeedClone
+            motherEgg.parent.children[1] = fatherSeedClone
         } else {
-            fatherSeed.parent.children[0] = fatherSeedClone
+            motherEgg.parent.children[0] = fatherSeedClone
         }
 
-        fatherSeed.tree.updateIndexes()
-        motherEgg.tree.updateIndexes()
+        fatherClone.updateIndexes()
+        motherClone.updateIndexes()
+        return [fatherClone, motherClone]
     }
 }

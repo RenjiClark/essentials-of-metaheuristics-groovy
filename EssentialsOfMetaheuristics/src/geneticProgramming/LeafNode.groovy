@@ -10,16 +10,10 @@ class LeafNode extends Node{
     def parent
     def index
     
-    def LeafNode(tree, parent, index){
+    def LeafNode(tree, parent){
         this.tree = tree
         this.parent = parent
         this.index = index
-        
-        if(random.nextBoolean()) {
-            value = random.nextInt(100)
-        } else {
-            value = tree.varArray[random.nextInt(tree.varArray.size)]
-        }
     }
     
     def eval() {
@@ -36,6 +30,12 @@ class LeafNode extends Node{
     
     String toString() {
         "${value}"
+    }
+    
+    def clone(treeC = this.tree, parentC = this.parent){
+        def clone = new LeafNode(treeC, parentC)
+        clone.value = value
+        return clone
     }
     
 }
