@@ -36,15 +36,4 @@ class Node implements Cloneable{
         parent.Arity == 2 && parent.children[1] == this
     }
 
-    def myClone() {
-        def clone = this.clone()
-        if (clone.Arity == 1){
-            clone.children[0] = clone.children[0].myClone()
-        } else if (clone.Arity == 2){
-            clone.children[0] = clone.children[0].myClone()
-            clone.children[1] = clone.children[1].myClone()
-        }
-        return clone
-    }
-
 }
