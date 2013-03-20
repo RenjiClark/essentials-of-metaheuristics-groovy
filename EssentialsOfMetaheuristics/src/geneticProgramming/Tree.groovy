@@ -65,4 +65,17 @@ class Tree implements Serializable{
 		def ois = new ObjectInputStream(bin)
 		return ois.readObject()
 	}
+	/*mutate takes a tree and an optional mutation index(default value is a random index within the tree. 
+	 * Replaces the node at that index with either a new tree or a new LeafNode with a 50% probability. */
+	def mutate(tree, mutateIndex = random.nextInt(tree.size)) {
+		def node = tree.search(mutateIndex)
+		if(random.nextBoolean()){
+			node = new Tree()
+		} else {
+		def newNode = new LeafNode(tree, node.parent, 0)
+		node = newNode
+		}
+		tree.updateIndexes()
+	}
+	
 }
