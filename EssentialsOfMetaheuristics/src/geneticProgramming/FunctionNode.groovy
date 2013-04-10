@@ -76,7 +76,7 @@ class FunctionNode extends Node{
     def updateIndexes(index){
         this.index = index
 
-        children[0].updateIndexes(1 + index)
+        if (Arity >= 1) children[0].updateIndexes(1 + index)
         if (Arity == 2) children[1].updateIndexes(1 + children[0].size() + index)
 
     }

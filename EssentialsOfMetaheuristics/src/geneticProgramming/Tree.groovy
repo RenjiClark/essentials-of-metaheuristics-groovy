@@ -4,7 +4,7 @@ import java.util.Random;
 
 import com.sun.org.apache.xalan.internal.xsltc.dom.CurrentNodeListFilter;
 
-class Tree implements Cloneable{
+class Tree{
 
     def head
 
@@ -24,8 +24,8 @@ class Tree implements Cloneable{
         new ValueArityPair({x-> Math.sin(x)}, 'Math.sin', 1),
         new ValueArityPair({x-> Math.cos(x)}, 'Math.cos', 1),
         new ValueArityPair({x-> Math.log(x)}, 'Math.log', 1)],
-    varArraySize = 2,
-    variables = ['getX()', 'getY()','distanceToNextDestination','direction','angle'],//TODO:finish thiiiiiiiiiiiiiiiiiiiiiiiiiiiis
+    varArraySize = 5,
+    variables = ['getX()', 'getY()','distanceToNextDestination','direction','angle'],
     newTree = true
     ) {
         //include max depth and size here

@@ -3,8 +3,8 @@ import applications.robocode.RoboCodeProblem
 import utility.GenomeFitnessPair;
 
 class MuPlusLambdaES {
-    Integer numParents = 5
-    Integer numChildren = 20
+    Integer numParents = 2
+    Integer numChildren = 6
     Random random = new Random()
 
     def maximize(problem){
@@ -18,33 +18,11 @@ class MuPlusLambdaES {
             individualArr.add(new GenomeFitnessPair(genome: individual, fitness: problem.quality(individual)))
         }
         
-//        def average = 0
-//        individualArr.each{individual ->
-//            average += individual.genome['ranEqLine'].size()
-//        }
-//        average = average/individualArr.size()
-//        
-//        individualArr.each{individual ->
-//            if (individual.genome['ranEqLine'].size() > average && random.nextInt(10)<2){
-//                individual.fitness = 0
-//            } else {
-//            individual.fitness = problem.quality(individual)
-//            }
-//        }
-        
-        
-
         def best = new GenomeFitnessPair(genome: individualArr[0].genome, fitness: individualArr[0].fitness)
 
         while(!problem.terminate(best.genome, best.fitness)) {
             individualArr.sort()
-            
-            average
-            individualArr.each{tree ->
-                average += tree.size()
-            }
-            average = average/individualArr.size()
-            
+            println("${individualArr[0].fitness > best.fitness}")
             if (individualArr[0].fitness > best.fitness) {
                 best.genome = individualArr[0].genome
                 best.fitness = individualArr[0].fitness

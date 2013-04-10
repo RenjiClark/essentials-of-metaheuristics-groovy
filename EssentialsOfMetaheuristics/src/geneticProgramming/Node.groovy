@@ -2,7 +2,7 @@ package geneticProgramming
 
 //import groovy.util.Node;
 
-class Node implements Cloneable{
+class Node{
 
     Random random = new Random()
 

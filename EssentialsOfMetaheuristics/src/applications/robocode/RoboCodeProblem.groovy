@@ -1,5 +1,6 @@
 package applications.robocode
 import geneticProgramming.*
+import operators.Crossovers
 
 /*
  *   id : an id used in the generation of the name of the class.
@@ -26,7 +27,11 @@ class RoboCodeProblem {
     }
 
     def copy(individual) {
-        return individual.clone()
+        def clone = ['id': null, 'ranEqLine':null]
+        ++individualCount
+        clone['id'] = individualCount
+        clone['ranEqLine'] = individual['ranEqLine'].clone()
+        return clone
     }
 
     def tweak(individual) {
@@ -34,11 +39,11 @@ class RoboCodeProblem {
         def nodeToTweak = tree.search(random.nextInt(tree.size()))
 
         if (nodeToTweak.isHead()) {
-            tree = new Tree(this, nodeToTweak.tree.functions, inputs[0].size())
+            tree = new Tree(nodeToTweak.tree.functions)
         } else if (nodeToTweak.isSecondChild()){
-            nodeToTweak.parent.children[1] = new FunctionNode(tree, null, 0)
+            nodeToTweak.parent.children[1] = new FunctionNode(tree, null)
         } else {
-            nodeToTweak.parent.children[0] = new FunctionNode(tree, null, 0)
+            nodeToTweak.parent.children[0] = new FunctionNode(tree, null)
         }
         tree.updateIndexes()
         individual['ranEqLine'] = tree
@@ -46,11 +51,18 @@ class RoboCodeProblem {
     }
     
     def crossover(individualA, individualB) {
-        return [individualA, individualB]
+        def crossovers = new Crossovers()
+        def treePair = crossovers.treeCrossover(individualA['ranEqLine'], individualB['ranEqLine'])
+        ++individualCount
+        def mapA = ['id' : individualCount, 'ranEqLine' : treePair[0]]
+        ++individualCount
+        def mapB = ['id' : individualCount, 'ranEqLine' : treePair[1]]
+        return [mapA, mapB]
     }
 
     def quality(individual) { // make it call RobotBuilder then BattleRunner then return the quality we care about
         ++evalCount
+        if (individual['ranEqLine'].size() > 20 && random.nextInt(10) < 3) return 0
         def bobTheBuilder = new RobotBuilder("templates/HawkOnFireOS.template")
         bobTheBuilder.buildJarFile(individual)
         def battleRunner = new BattleRunner("templates/battle.template")
@@ -60,6 +72,6 @@ class RoboCodeProblem {
     }
 
     def terminate(bestIndividual, bestQuality) {
-        evalCount > 100
+        evalCount > 30
     }
 }
