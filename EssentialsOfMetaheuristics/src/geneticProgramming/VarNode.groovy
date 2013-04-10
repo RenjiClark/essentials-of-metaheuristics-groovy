@@ -35,7 +35,7 @@ class VarNode extends Node{
     }
 
     String toString() {
-        return "var${indexInVarArray}"
+        return "${tree.variables[indexInVarArray]}"
     }
     
     def clone(treeC = this.tree, parentC = this.parent){

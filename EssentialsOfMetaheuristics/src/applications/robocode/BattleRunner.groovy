@@ -32,6 +32,7 @@ class BattleRunner {
         linkJarFile(id)
         File battleFile = new File("${robotDirectory}/evolve.battle")
         def command = "${userHome}/robocode/robocode.sh -battle ${battleFile.absolutePath} -nodisplay"
+//        println "command = <${command}>"
         def proc = command.execute(null, new File(robotDirectory))
         proc.waitFor()
         assert proc.exitValue() == 0
@@ -45,7 +46,12 @@ class BattleRunner {
                 result = Integer.parseInt(m[0][1])
             }
         }
-        if (result) {
+        if (result != false) {
+            new File("evolved_robots/Individual_${id}.jar").delete()
+            def commandToDeleteJar = "rm Individual_${id}.jar"
+            def procToDeleteJar = commandToDeleteJar.execute(null, new File("${userHome}/robocode/robots/"))
+            procToDeleteJar.waitFor()
+            print("${result}, ")
             return result
         } else {
             throw new RuntimeException("Didn't find score for evolved robot")
@@ -57,7 +63,7 @@ class BattleRunner {
         def command = "ln -s ${robotDirectoryAbsolute}/Individual_${id}.jar ."
         def proc = command.execute(null, robotDir)
         proc.waitFor()
-        assert proc.exitValue() == 0
         assert proc.err.text.equals("")
+        assert proc.exitValue() == 0
     }
 }

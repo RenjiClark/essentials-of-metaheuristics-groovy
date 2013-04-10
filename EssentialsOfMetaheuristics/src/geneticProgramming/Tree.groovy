@@ -11,26 +11,27 @@ class Tree implements Cloneable{
     Random random = new Random()
 
     def functions
-    def problem
     def varArray
     def varArraySize
+    def variables
 
     def Tree(
-    problem,
     functions = [new ValueArityPair({x,y -> x+y}, '+', 2),
         new ValueArityPair({x,y -> x-y}, '-', 2),
         new ValueArityPair({x,y -> x*y}, '*', 2),
         new ValueArityPair({x,y -> x/y}, '/', 2),
-        new ValueArityPair({x-> Math.sin(x)}, 'Sin', 1),
-        new ValueArityPair({x-> Math.cos(x)}, 'Cos', 1),
-        new ValueArityPair({x-> Math.log(x)}, 'Log', 1)],
-    varArraySize = 0,
+        new ValueArityPair({x,y-> x**y}, 'Math.pow', 2),
+        new ValueArityPair({x-> Math.sin(x)}, 'Math.sin', 1),
+        new ValueArityPair({x-> Math.cos(x)}, 'Math.cos', 1),
+        new ValueArityPair({x-> Math.log(x)}, 'Math.log', 1)],
+    varArraySize = 2,
+    variables = ['getX()', 'getY()','distanceToNextDestination','direction','angle'],//TODO:finish thiiiiiiiiiiiiiiiiiiiiiiiiiiiis
     newTree = true
     ) {
         //include max depth and size here
         this.functions = functions
-        this.problem = problem
         this.varArraySize = varArraySize
+        this.variables = variables
         if (newTree){
             head = new FunctionNode(this, null)
             updateIndexes()
@@ -80,10 +81,16 @@ class Tree implements Cloneable{
     }
 
     def clone(){
-        def clone = new Tree(problem, functions, varArraySize, false)
+        
+        def clone = new Tree(functions, varArraySize, variables, false)
         clone.head = head.clone(clone, null)
         clone.updateIndexes()
         return clone
     }
+    
+    def test(num){
+        
+    }
+    
 
 }

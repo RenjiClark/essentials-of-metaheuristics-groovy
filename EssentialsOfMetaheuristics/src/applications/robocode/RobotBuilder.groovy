@@ -5,13 +5,13 @@ import groovy.text.SimpleTemplateEngine
 class RobotBuilder {
     def template
     def robotDirectory = "evolved_robots"
-	def robotPackage = "evolved"
-    
+    def robotPackage = "evolved"
+
     def RobotBuilder(String templateFileName) {
         def engine = new SimpleTemplateEngine()
         template = engine.createTemplate(new File(templateFileName))
     }
-    
+
     def buildJarFile(values) {
         buildClassFile(values)
         buildPropertiesFile(values)
@@ -23,11 +23,17 @@ class RobotBuilder {
         }
         def proc = command.execute(null, new File(robotDirectory))
         proc.waitFor()
-        println(proc.in.text)
+//        println(proc.in.text)
         assert proc.err.text.equals("")
         assert proc.exitValue() == 0
+
+        new File("evolved_robots/evolved/Individual_${id}.java").delete()
+        new File("evolved_robots/evolved/Individual_${id}.class").delete()
+        new File("evolved_robots/evolved/Individual_${id}\$MicroEnemy.class").delete()
+        new File("evolved_robots/evolved/Individual_${id}.properties").delete()
+
     }
-    
+
     def buildPropertiesFile(values) {
         def id = values['id']
         def filenamePrefix = "Individual_${id}"
@@ -35,7 +41,7 @@ class RobotBuilder {
         def propertiesFile = new File("${robotDirectory}/${robotPackage}/${propertiesFileName}")
         propertiesFile << "robots: ${robotPackage}/${filenamePrefix}.class"
     }
-    
+
     def buildClassFile(values) {
         def javaFileName = buildJavaFile(values)
         def command = "javac -cp ../lib/robocode.jar ${robotPackage}/${javaFileName}"
@@ -43,18 +49,18 @@ class RobotBuilder {
         proc.waitFor()
         assert proc.exitValue() == 0
         assert proc.err.text.equals("")
-//        println "return code: ${proc.exitValue()}"
-//        println "stderr: ${proc.err.text}"
-//        println "stdout: ${proc.in.text}"
+        //        println "return code: ${proc.exitValue()}"
+        //        println "stderr: ${proc.err.text}"
+        //        println "stdout: ${proc.in.text}"
     }
-    
+
     def buildJavaFile(values) {
         def javaFileName = makeJavaFileName(values)
         File javaFile = createFile(javaFileName)
         writeFile(javaFile, values)
         return javaFileName
     }
-    
+
     def makeJavaFileName(values) {
         def id = values['id']
         def filename = "Individual_${id}.java"
@@ -62,7 +68,7 @@ class RobotBuilder {
 
     private File createFile(javaFileName) {
         new File(robotDirectory).mkdir()
-		new File("${robotDirectory}/${robotPackage}").mkdir()
+        new File("${robotDirectory}/${robotPackage}").mkdir()
         File javaFile = new File("${robotDirectory}/${robotPackage}/${javaFileName}")
         assert !javaFile.exists()
         javaFile.createNewFile()

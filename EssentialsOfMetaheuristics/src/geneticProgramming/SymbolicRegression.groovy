@@ -42,7 +42,7 @@ class SymbolicRegression{
         new ValueArityPair({x-> Math.sin(x)}, 'Sin', 1),
         new ValueArityPair({x-> Math.cos(x)}, 'Cos', 1),
         new ValueArityPair({x-> Math.log(x)}, 'Log', 1)],
-    maxIterations = 1000
+    maxIterations = 10000
     ){
         this.functionNodesAllowed = functionNodesAllowed
         this.functionToMatch = functionToMatch

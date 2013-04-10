@@ -2,7 +2,7 @@ package geneticProgramming
 
 class LeafNode extends Node{
    
-    def value = random.nextInt(100)
+    def value = random.nextInt(99) + 1
     
     def Arity = 0
     

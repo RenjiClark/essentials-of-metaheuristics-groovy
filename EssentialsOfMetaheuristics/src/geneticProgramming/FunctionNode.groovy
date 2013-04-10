@@ -13,9 +13,16 @@ class FunctionNode extends Node{
 
     def eval() {
         def child0Eval = children[0].eval()
+        if (key == 'if') {
+            if (children[0]) {
+                return children[1].children[0].eval()
+            } else {
+                return children[1].children[1].eval()
+            }
+        }
         if (key == 'Log' && child0Eval.compareTo(0) <= 0) return 1
         if (Arity == 1) return func(child0Eval)
-        
+
         def child1Eval = children[1].eval()
         if (key == '/' && Math.abs(child1Eval).compareTo(0.00001) < 0) return 1
         return func(child0Eval, child1Eval)
@@ -26,32 +33,63 @@ class FunctionNode extends Node{
         this.parent = parent
         this.index = index
 
-        Arity.times {
-            def pickChild = random.nextInt(4)
-            if(pickChild == 0) {
-                children += new LeafNode(tree, this)
-            } else if(pickChild == 1){
-                if (tree.varArraySize != 0) {
-                    children += new VarNode(tree, this)
-                } else {
+        def pickChild
+        
+//        if(key == 'if'){
+//            pickChild = random.nextInt(4)
+//            if(pickChild == 0) {
+//                children += new LeafNode(tree, this)
+//            } else if(pickChild == 1){
+//                if (tree.varArraySize != 0) {
+//                    children += new VarNode(tree, this)
+//                } else {
+//                    children += new LeafNode(tree, this)
+//                }
+//            } else {
+//                children += new FunctionNode(tree, this)
+//            }
+//            children += new FunctionNode(tree, this) //TODO: make a BoolNode
+//            children[1].funcIndex = -1
+//            children[1].func = {->}
+//            children[1].key = 'Do'
+//            children[1].Arity = 2
+//        }
+        
+        if (createChildren) {
+            Arity.times {
+                pickChild = random.nextInt(4)
+                if(pickChild == 0) {
                     children += new LeafNode(tree, this)
+                } else if(pickChild == 1){
+                    if (tree.varArraySize != 0) {
+                        children += new VarNode(tree, this)
+                    } else {
+                        children += new LeafNode(tree, this)
+                    }
+                } else {
+                    children += new FunctionNode(tree, this)
                 }
-            } else {
-                children += new FunctionNode(tree, this)
             }
         }
     }
 
     def updateIndexes(index){
         this.index = index
-        
+
         children[0].updateIndexes(1 + index)
         if (Arity == 2) children[1].updateIndexes(1 + children[0].size() + index)
-        
+
     }
 
     @Override
     String toString() {
+        if (key == 'Math.pow'){
+            return "Math.pow(${children[0]},${children[1]})"
+        }
+        if (key == 'if'){
+            return "if(${children[0]}){\n${children[1].children[0]}\n} else {\n${children[1].children[1]}}"
+        }
+        
         if (Arity == 1) return "${key}(${children[0]})"
         return "(${children[0]})${key}(${children[1]})"
     }
@@ -63,14 +101,14 @@ class FunctionNode extends Node{
         }
         return (children[1].depth() + 1)
     }
-    
+
     def clone(treeC = this.tree, parentC = this.parent){
         def clone = new FunctionNode(treeC, parentC, false)
         clone.funcIndex = funcIndex
         clone.func = func
         clone.key = key
         clone.Arity = Arity
-        clone.children = []
+//        clone.children = []
         clone.children.add(children[0].clone(treeC, clone))
         if (Arity == 2) clone.children.add(children[1].clone(treeC, clone))
         return clone

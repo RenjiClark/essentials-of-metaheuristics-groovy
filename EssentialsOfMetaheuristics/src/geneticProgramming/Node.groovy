@@ -12,7 +12,7 @@ class Node implements Cloneable{
     def size() {
         count = 0
         sizeHelper(this)
-        count
+        return count
     }
 
     def sizeHelper(currentNode) {
